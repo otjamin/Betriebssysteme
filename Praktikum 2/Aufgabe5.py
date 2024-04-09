@@ -8,7 +8,7 @@ class MyClass:
     def __init__(self, debug=False, num_threads=100):
         self.debug = debug  # Durch True setzen wird "var" ausgegeben, standardm. False.
         self.var = 0  # Dieser Wert wird durch die Threads angepasst
-        self.num_threads = 100  # Anzahl der zu startenden Threads, standardm. 100
+        self.num_threads = num_threads  # Anzahl der zu startenden Threads, standardm. 100
 
         '''
         Diese Methode addiert 5 auf die Variable var
