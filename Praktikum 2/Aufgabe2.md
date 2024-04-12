@@ -53,7 +53,7 @@ python3 Aufgabe2.py "ausgabe2" &
     ![](<images/Screenshot 2024-04-12 084541.png>)
 6.  Ausgabe2_pid.py
 
-```paython
+```python
 import os
 
 N = 3
