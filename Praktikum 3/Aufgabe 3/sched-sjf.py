@@ -97,18 +97,23 @@ def futureprocesses(t):
   return fp
 
 def schedule():
-  # Implementation des FCFS-Schedulers (First Come, First Served)
+  # Implementation des SJF-Schedulers (Shortest Job First)
   global current, tasks, runqueue, blocked, current, cputime
-  
-  # falls aktueller Prozess noch bereit: weitermachen (FCFS)
+
+  # falls aktueller Prozess noch bereit: weitermachen (SJF)
   if (current >= 0) and (get_status(current) == S_ACTIVE):
     choice = current
   # falls weder bereite noch blockierte Prozesse: Ende
   elif runqueue + blocked + futureprocesses(cputime) == []:
     choice = -2
-  # falls nicht: nehme ersten Prozess aus Runqueue
+  # falls nicht: nehme Prozess mit kuerzester Restzeit
   elif (runqueue != []):
+    shortest = get_head_behavior(runqueue[0])  # init. mit 1. Prozess
     choice = runqueue[0]
+    for pid in runqueue:
+      if get_head_behavior(pid) < shortest:  # kürzere Restzeit gefunden
+        shortest = get_head_behavior(pid)
+        choice = pid
   else:
   # falls alle blockiert: idlen!
     choice = -1  #  alle blockiert

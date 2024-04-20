@@ -28,6 +28,11 @@ Schließlich wird überprüft, ob der Prozess fertig ist - Prozess wird auf Stat
 
 ### 3. Erzeugen Sie eine Kopie von _sched.py_ (etwa: _sched-sjf.py_) und passen Sie darin die Funktion `schedule()` so an, dass sie statt FCFS den SJF-Scheduler (Shortest Job First)  implementiert. Kommentieren Sie das Ergebnis stichwortartig.
 
+- Änderung vergleichsweise einfach an dem Ast `elif (runqueue != []):` durchgeführt
+- Nach initialisierung mit erstem Element aus der `runqueue` werden alle Elemente abgegangen und nach einem kürzeren gesucht
+- Gibt es ein kürzeres Element, dann wird die `choice` mit dessen PID überschrieben
+- Diese Änderung hat keine Einfluss auf Konfigurationsdateien wie `nur-cpu.dat` in denen es keine I/O-Phasen gibt
+
 ### 4. Etwas komplizierter wird es, einen unterbrechenden Scheduler zu schreiben.
 
 **a) Im letzten Schritt passen Sie eine Kopie von _sched-sjf.py_ z. B. _sched-srt.py_, an und implementieren nur den SRT-Scheduler (Shortest Remaining Time). Hier funktioniert die einfache Variante aus den vorigen zwei Schedulern nicht mehr, aktive Prozesse solange laufen zu lassen, bis sie sich beenden oder in eine I/O-Phase eintreten.**
