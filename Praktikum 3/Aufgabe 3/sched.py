@@ -5,7 +5,7 @@
 # v2.2 (2011/05/12)
 # 
 # Vorlesung Betriebssysteme
-# Hans-Georg Eßer, Hochschule München
+# Hans-Georg Eï¿½er, Hochschule Mï¿½nchen
 # hans-georg.esser@hm.edu
 
 proccount = 0;   # Anzahl der Prozesse im System
@@ -116,16 +116,16 @@ def schedule():
 
 def ps ():
   global tasks,proccount,cputime,runqueue,blocked
-  print "PID | Sta | End | CPU | I/O | Status | Verhalten"
+  #print "PID | Sta | End | CPU | I/O | Status | Verhalten"
+  print("PID | Sta | End | CPU | I/O | Status | Verhalten")
   for pid in range(0,proccount):
     if 1<2: # cputime >= get_starttime(pid)-1:
       task = tasks[pid]
-      print "%3d | %3d | %3d | %3d | %3d | %6s |" % (pid, 
+      print("%3d | %3d | %3d | %3d | %3d | %6s | %s" % (pid, 
         get_starttime(pid), get_endtime(pid),
         get_cputime(pid), get_iotime(pid), 
-        statusname( get_status(pid) ) ),
-      print task["behavior"]                             
-  print "Runqueue:",runqueue,"  Blocked:",blocked
+        statusname( get_status(pid) ), task["behavior"] ))
+  print("Runqueue:",runqueue,"  Blocked:",blocked)
   print
   return
 
@@ -138,7 +138,7 @@ def init ():
     lines = f.readlines()
     f.close ()
   except:
-    print "Fehler: Bitte Dateinamen der Konfigurationsdatei angeben."
+    print("Fehler: Bitte Dateinamen der Konfigurationsdatei angeben.")
     exit()
   
   for l in lines:
@@ -212,12 +212,12 @@ def log_to_trace(status):
 def stats():
   global cputime
   print
-  print "Endzeit: %d" % cputime
-  print "Trace:",trace
+  print("Endzeit: %d" % cputime)
+  print("Trace:",trace)
 
-  print "Laufzeiten:"
-  print "PID Ankunft Rechenz Startze Endzeit TurnAro  Quotient"
-  print "-----------------------------------------------------"
+  print("Laufzeiten:")
+  print("PID Ankunft Rechenz Startze Endzeit TurnAro  Quotient")
+  print("-----------------------------------------------------")
 
   for pid in range(0,proccount):
     stime  = get_starttime(pid)
@@ -228,8 +228,8 @@ def stats():
       ratio = (etime-stime+0.0)/cputime
     else:
       ratio = -1
-    print "%3d %7d %7d %7d %7d %7d %9.4f" % (pid, 
-      stime, cputime, frtime, etime, etime-stime, ratio)
+    print("%3d %7d %7d %7d %7d %7d %9.4f" % (pid, 
+      stime, cputime, frtime, etime, etime-stime, ratio))
 
 
 
@@ -238,7 +238,7 @@ def stats():
 
 
 init ()
-print "Anzahl tasks: ", proccount
+print("Anzahl tasks: ", proccount)
 
 
 cputime = 0   # Init. der Uhr
@@ -265,12 +265,12 @@ while not finished:
   log_to_trace (current)  # Auswahl protokollieren
   activate (current)      # Status aendern
   if current >= 0:
-    print "Zeit: %4d, Es laeuft PID: %3d [%3d]" % (cputime,current,get_cputime(current))
+    print("Zeit: %4d, Es laeuft PID: %3d [%3d]\n" % (cputime,current,get_cputime(current)))
     run_current()  # aktuellen Prozess ausfuehren
     # bei allen blockierten Prozesse Wartezeit runterzaehlen
     update_blocked_processes()
   elif current == -1:
-    print "Zeit: %4d, alle blockiert" % cputime
+    print("Zeit: %4d, alle blockiert\n" % cputime)
     # bei allen blockierten Prozesse Wartezeit runterzaehlen
     update_blocked_processes()
   else:  
