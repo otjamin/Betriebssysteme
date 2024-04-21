@@ -97,16 +97,21 @@ def futureprocesses(t):
   return fp
 
 def schedule():
-  # Implementation des SJF-Schedulers (Shortest Job First)
+  # Implementation des SRT-Schedulers (Shortest Remaining Time)
   global current, tasks, runqueue, blocked, current, cputime
 
-  # falls aktueller Prozess noch bereit: weitermachen (SJF)
-  if (current >= 0) and (get_status(current) == S_ACTIVE):
+  # falls job mit kürzerer Restzeit als aktueller Prozess: wechseln (SRT)
+  if (runqueue != [] and current >= 0 and get_status(current) == S_ACTIVE):
+    shortest = get_head_behavior(current)  # init. mit aktuellem Prozess
     choice = current
+    for pid in runqueue:
+      if get_head_behavior(pid) < shortest:  # kürzere Restzeit gefunden
+        shortest = get_head_behavior(pid)
+        choice = pid
   # falls weder bereite noch blockierte Prozesse: Ende
   elif runqueue + blocked + futureprocesses(cputime) == []:
     choice = -2
-  # falls nicht: nehme Prozess mit kuerzester Restzeit
+  # falls nicht: nehme Prozess mit kuerzester Restzeit (SJF)
   elif (runqueue != []):
     shortest = get_head_behavior(runqueue[0])  # init. mit 1. Prozess
     choice = runqueue[0]
@@ -114,9 +119,27 @@ def schedule():
       if get_head_behavior(pid) < shortest:  # kürzere Restzeit gefunden
         shortest = get_head_behavior(pid)
         choice = pid
-  else:
   # falls alle blockiert: idlen!
-    choice = -1  #  alle blockiert
+  else:
+    choice = -1
+
+  # # falls aktueller Prozess noch bereit: weitermachen (SJF)
+  # if (current >= 0) and (get_status(current) == S_ACTIVE):
+  #   choice = current
+  # # falls weder bereite noch blockierte Prozesse: Ende
+  # elif runqueue + blocked + futureprocesses(cputime) == []:
+  #   choice = -2
+  # # falls nicht: nehme Prozess mit kuerzester Restzeit
+  # elif (runqueue != []):
+  #   shortest = get_head_behavior(runqueue[0])  # init. mit 1. Prozess
+  #   choice = runqueue[0]
+  #   for pid in runqueue:
+  #     if get_head_behavior(pid) < shortest:  # kürzere Restzeit gefunden
+  #       shortest = get_head_behavior(pid)
+  #       choice = pid
+  # else:
+  # # falls alle blockiert: idlen!
+  #   choice = -1  #  alle blockiert
   return choice
 
 def ps ():

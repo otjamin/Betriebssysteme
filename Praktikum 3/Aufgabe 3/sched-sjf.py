@@ -100,13 +100,13 @@ def schedule():
   # Implementation des SJF-Schedulers (Shortest Job First)
   global current, tasks, runqueue, blocked, current, cputime
 
-  # falls aktueller Prozess noch bereit: weitermachen (SJF)
+  # falls aktueller Prozess noch bereit: weitermachen (FCFS)
   if (current >= 0) and (get_status(current) == S_ACTIVE):
     choice = current
   # falls weder bereite noch blockierte Prozesse: Ende
   elif runqueue + blocked + futureprocesses(cputime) == []:
     choice = -2
-  # falls nicht: nehme Prozess mit kuerzester Restzeit
+  # falls nicht: nehme Prozess mit kuerzester Restzeit (SJF)
   elif (runqueue != []):
     shortest = get_head_behavior(runqueue[0])  # init. mit 1. Prozess
     choice = runqueue[0]

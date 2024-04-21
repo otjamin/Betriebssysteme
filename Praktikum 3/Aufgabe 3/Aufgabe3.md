@@ -41,4 +41,10 @@ Schließlich wird überprüft, ob der Prozess fertig ist - Prozess wird auf Stat
 
 Siehe _sched-srt.py_.
 
+Falls der aktuelle Prozess noch lauffähig ist, wird ein kürzerer Prozess in der Warteschlange gesucht, um diesen Auszutauschen.
+
 **c) Zeichnen Sie ein Gant-Diagramm Ihres Ergebnisses. Prüfen Sie, dass Ihr Ergebnis mit dem erwarteten Ergebnis übereinstimmt !**
+
+![Gant Diagramm](Gant-1.png)
+
+Das Ergebnis stimmt mit dem erwarteten Verlauf überein.
