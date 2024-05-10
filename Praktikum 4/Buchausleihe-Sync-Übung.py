@@ -34,7 +34,7 @@ class Student(threading.Thread):
 
     def borrow_books(self, books):
         for book in books:
-            while not book.acquire(blocking=True):
+            while not book.acquire(blocking=True, timeout=1):  #Versuchen, das Buch auszuleihen. blocking=True um Semaphore zu berücksichtigen und timeout um Deadlocks zu vermeiden
                 pass
         self.books_borrowed += 1
         print(f"Student '{self.name}' hat _{self.books_borrowed}_ Mal alle Bücher ausgeliehen\n")
@@ -53,18 +53,28 @@ def print_statistics(students):
     for student in students:
         print(f"Student '{student.name}' hat {student.books_borrowed} Mal Bücher ausgeliehen")
 
+def main():
+    library = Library()
 
-library = Library()
+    numberOfStudents = int(input("Anzahl der gewünschten Studenten eingeben: "))
+    readingTime = int(input("Gewünschte Lesezeit eingeben: "))
 
-numberOfStudents = int(input("Anzahl der gewünschten Studenten eingeben: "))
-readingTime = int(input("Gewünschte Lesezeit eingeben: "))
+    students = [Student(library, readingTime) for _ in range(numberOfStudents)]
+    for student in students:    # Starte alle Studenten-Threads
+        student.start()
 
-students = [Student(library, readingTime) for _ in range(numberOfStudents)]
-for student in students:
-    student.start()
-for student in students:
-    student.join()
+    # Bestimme den Parallelisierungsgrad
+    parallelisierungsgrad = threading.active_count()
 
-print_statistics(students)
+    for student in students:    # Warte auf das Ende aller Studenten-Threads
+        student.join()
 
+    # Ausgabe der Statistik über die Anzahl der ausgeliehenen Bücher pro Student
+    print_statistics(students)
+
+    # Ausgabe des Parallelisierungsgrads
+    print(f"\nDer Parallelisierungsgrad beträgt: {parallelisierungsgrad}\n")
+
+if __name__ == "__main__":
+    main()
 
