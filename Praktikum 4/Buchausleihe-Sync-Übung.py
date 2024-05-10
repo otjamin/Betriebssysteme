@@ -1,5 +1,10 @@
 import threading
 import time
+
+global fstCombinationCounter
+fstCombinationCounter =  0
+global sndCombinationCounter
+sndCombinationCounter = 0
 class Library:
     def __init__(self):
         # Initialisiere Semaphoren für jedes Buch mit der Anzahl der verfügbaren Exemplare
@@ -20,27 +25,32 @@ class Student(threading.Thread):
         self.sndBooksToBorrow = sndBooksToBorrow    # zweite Liste der Bücher, die der Student ausleihen soll
 
     def run(self):
-        while True:
-            # Versuche, Bücher 1, 2 und 3 auszuleihen
+        global fstCombinationCounter, sndCombinationCounter
+        n = 0
+        while n < 5:    # Begrenzung um eine Endlosschleife zu vermeiden und die Daten auswerten zu können
+            n += 1
+            # Versuche, Bücher mit übergebener Kombination auszuleihen
             if self.borrow_books(self.fstBooksToBorrow):
                 #print(f"Student {self.name} hat Bücher 1, 2 und 3 ausgeliehen\n")
-                time.sleep(self.students_readingTime)
+                fstCombinationCounter += 1
+                time.sleep(self.students_readingTime)   # Lesezeit
                 # Gib die Bücher zurück
                 self.return_books(self.fstBooksToBorrow)
 
-            # Versuche, Bücher 2, 3 und 4 auszuleihen
+            # Versuche, Bücher mit weiterer übergebener Kombination auszuleihen
             elif self.borrow_books(self.sndBooksToBorrow):
                 #print(f"Student {self.name} hat Bücher 2, 3 und 4 ausgeliehen\n")
-                time.sleep(self.students_readingTime)
+                sndCombinationCounter += 1
+                time.sleep(self.students_readingTime)   # Lesezeit
                 # Gib die Bücher zurück
                 self.return_books(self.sndBooksToBorrow)
 
 
     def borrow_books(self, books):
         for book in books:
-            while not book.acquire(blocking=False):  #Versuchen, das Buch auszuleihen. blocking=True um Semaphore zu berücksichtigen und timeout um Deadlocks zu vermeiden
-                pass
-        self.books_borrowed += 1
+            if not book.acquire(blocking=False):  #Versuchen, die Bücher auszuleihen. blocking=True um Semaphore zu berücksichtigen und timeout um Deadlocks zu vermeiden
+                return False
+        self.books_borrowed += 1                                # Erhöhe den Counter für ausgeliehene Bücher
         print(f"Student '{self.name}' hat _{self.books_borrowed}_ Mal alle Bücher ausgeliehen\n")
         Student.students_with_three_books += 1
         print(f"ALLE DREI: Es gibt _{Student.students_with_three_books}_ Studenten, die gerade drei Bücher haben\n")
@@ -82,7 +92,6 @@ def main():
     readingTime = float(input("Gewünschte Lesezeit eingeben: "))
 
     students = [Student(library, readingTime, fstBooksToBorrow, sndBooksToBorrow) for _ in range(numberOfStudents)]
-    #students = [Student(library, readingTime) for _ in range(numberOfStudents)]
     for student in students:    # Starte alle Studenten-Threads
         student.start()
 
@@ -97,6 +106,8 @@ def main():
 
     # Ausgabe des Parallelisierungsgrads
     print(f"\nDer Parallelisierungsgrad beträgt: {parallelisierungsgrad}\n")
+
+    print(f"Erste Kombination wird {fstCombinationCounter} Mal ausgeliehen.\n Zweite Kombination wird {sndCombinationCounter} Mal ausgeliehen")
 
 if __name__ == "__main__":
     main()
