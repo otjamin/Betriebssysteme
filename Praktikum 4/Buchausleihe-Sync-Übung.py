@@ -12,10 +12,10 @@ class Student(threading.Thread):
     students_with_three_books = 0
 
     def __init__(self, library, readingTime):
-        threading.Thread.__init__(self)
-        self.library = library
-        self.books_borrowed = 0
-        self.students_readingTime = readingTime
+        threading.Thread.__init__(self)             # Initialisiere den Thread
+        self.library = library                      # Referenz auf die Bibliothek
+        self.books_borrowed = 0                     # Counter für Anzahl der ausgeliehenen Bücher
+        self.students_readingTime = readingTime     # Lesezeit des Studenten
 
     def run(self):
         # Versuche, Bücher 1, 2 und 3 auszuleihen
