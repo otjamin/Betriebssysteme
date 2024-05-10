@@ -20,24 +20,25 @@ class Student(threading.Thread):
         self.sndBooksToBorrow = sndBooksToBorrow    # zweite Liste der Bücher, die der Student ausleihen soll
 
     def run(self):
-        # Versuche, Bücher 1, 2 und 3 auszuleihen
-        if self.borrow_books(self.fstBooksToBorrow):
-            #print(f"Student {self.name} hat Bücher 1, 2 und 3 ausgeliehen\n")
-            time.sleep(self.students_readingTime)
-            # Gib die Bücher zurück
-            self.return_books(self.fstBooksToBorrow)
+        while True:
+            # Versuche, Bücher 1, 2 und 3 auszuleihen
+            if self.borrow_books(self.fstBooksToBorrow):
+                #print(f"Student {self.name} hat Bücher 1, 2 und 3 ausgeliehen\n")
+                time.sleep(self.students_readingTime)
+                # Gib die Bücher zurück
+                self.return_books(self.fstBooksToBorrow)
 
-        # Versuche, Bücher 2, 3 und 4 auszuleihen
-        if self.borrow_books(self.sndBooksToBorrow):
-            #print(f"Student {self.name} hat Bücher 2, 3 und 4 ausgeliehen\n")
-            time.sleep(self.students_readingTime)
-            # Gib die Bücher zurück
-            self.return_books(self.sndBooksToBorrow)
+            # Versuche, Bücher 2, 3 und 4 auszuleihen
+            elif self.borrow_books(self.sndBooksToBorrow):
+                #print(f"Student {self.name} hat Bücher 2, 3 und 4 ausgeliehen\n")
+                time.sleep(self.students_readingTime)
+                # Gib die Bücher zurück
+                self.return_books(self.sndBooksToBorrow)
 
 
     def borrow_books(self, books):
         for book in books:
-            while not book.acquire(blocking=True, timeout=1):  #Versuchen, das Buch auszuleihen. blocking=True um Semaphore zu berücksichtigen und timeout um Deadlocks zu vermeiden
+            while not book.acquire(blocking=False):  #Versuchen, das Buch auszuleihen. blocking=True um Semaphore zu berücksichtigen und timeout um Deadlocks zu vermeiden
                 pass
         self.books_borrowed += 1
         print(f"Student '{self.name}' hat _{self.books_borrowed}_ Mal alle Bücher ausgeliehen\n")
