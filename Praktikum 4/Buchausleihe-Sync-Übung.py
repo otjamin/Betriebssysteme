@@ -27,7 +27,7 @@ class Student(threading.Thread):
     def run(self):
         global fstCombinationCounter, sndCombinationCounter
         n = 0
-        while n < 5:    # Begrenzung um eine Endlosschleife zu vermeiden und die Daten auswerten zu können
+        while n < 10:    # Begrenzung um eine Endlosschleife zu vermeiden und die Daten auswerten zu können
             n += 1
             # Versuche, Bücher mit übergebener Kombination auszuleihen
             if self.borrow_books(self.fstBooksToBorrow):
@@ -48,7 +48,7 @@ class Student(threading.Thread):
 
     def borrow_books(self, books):
         for book in books:
-            if not book.acquire(blocking=False):  #Versuchen, die Bücher auszuleihen. blocking=True um Semaphore zu berücksichtigen und timeout um Deadlocks zu vermeiden
+            if not book.acquire(blocking=True, timeout=1):  #Versuchen, die Bücher auszuleihen. blocking=True um Semaphore zu berücksichtigen und timeout um Deadlocks zu vermeiden
                 return False
         self.books_borrowed += 1                                # Erhöhe den Counter für ausgeliehene Bücher
         print(f"Student '{self.name}' hat _{self.books_borrowed}_ Mal alle Bücher ausgeliehen\n")
