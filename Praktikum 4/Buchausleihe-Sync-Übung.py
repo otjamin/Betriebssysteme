@@ -50,7 +50,7 @@ class Student(threading.Thread):
         for book in books:
             if not book.acquire(blocking=True, timeout=1):  #Versuchen, die Bücher auszuleihen. blocking=True um Semaphore zu berücksichtigen und timeout um Deadlocks zu vermeiden
                 return False
-        self.books_borrowed += 1                                # Erhöhe den Counter für ausgeliehene Bücher
+        self.books_borrowed += 1
         print(f"Student '{self.name}' hat _{self.books_borrowed}_ Mal alle Bücher ausgeliehen\n")
         Student.students_with_three_books += 1
         print(f"ALLE DREI: Es gibt _{Student.students_with_three_books}_ Studenten, die gerade drei Bücher haben\n")
@@ -72,6 +72,8 @@ def main():
 
     allBooks = [library.book1, library.book2, library.book3, library.book4]
 
+    # Eingabe
+    #############
     fstBookId = (input("Geben sie die erste Ausleih-Kombination ein: "))
 
     # Konvertiere die IDs in eine Liste von Integer-Werten
@@ -90,24 +92,28 @@ def main():
 
     numberOfStudents = int(input("Anzahl der gewünschten Studenten (Threads) eingeben: "))
     readingTime = float(input("Gewünschte Lesezeit eingeben: "))
+    #############
 
     students = [Student(library, readingTime, fstBooksToBorrow, sndBooksToBorrow) for _ in range(numberOfStudents)]
-    for student in students:    # Starte alle Studenten-Threads
+
+    # Starte alle Studenten-Threads
+    for student in students:
         student.start()
 
     # Bestimme den Parallelisierungsgrad
     parallelisierungsgrad = threading.active_count()
 
-    for student in students:    # Warte auf das Ende aller Studenten-Threads
+    # Warte auf das Ende aller Studenten-Threads
+    for student in students:
         student.join()
 
     # Ausgabe der Statistik über die Anzahl der ausgeliehenen Bücher pro Student
     print_statistics(students)
 
     # Ausgabe des Parallelisierungsgrads
-    print(f"\nDer Parallelisierungsgrad beträgt: {parallelisierungsgrad}\n")
+    #print(f"\nDer Parallelisierungsgrad beträgt: {parallelisierungsgrad}\n")
 
-    print(f"Erste Kombination wird {fstCombinationCounter} Mal ausgeliehen.\n Zweite Kombination wird {sndCombinationCounter} Mal ausgeliehen")
+    print(f"Erste Kombination wird {fstCombinationCounter} Mal ausgeliehen.\nZweite Kombination wird {sndCombinationCounter} Mal ausgeliehen.")
 
 if __name__ == "__main__":
     main()
