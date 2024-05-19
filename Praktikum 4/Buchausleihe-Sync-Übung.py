@@ -69,7 +69,6 @@ def print_statistics(students):
 
 def main():
     library = Library()
-
     allBooks = [library.book1, library.book2, library.book3, library.book4]
 
     # Eingabe
@@ -94,14 +93,12 @@ def main():
     readingTime = float(input("Gewünschte Lesezeit eingeben: "))
     #############
 
+    # initialisiere Liste an Studenten anhand der vom User gegebenen Parameter
     students = [Student(library, readingTime, fstBooksToBorrow, sndBooksToBorrow) for _ in range(numberOfStudents)]
 
     # Starte alle Studenten-Threads
     for student in students:
         student.start()
-
-    # Bestimme den Parallelisierungsgrad
-    parallelisierungsgrad = threading.active_count()
 
     # Warte auf das Ende aller Studenten-Threads
     for student in students:
@@ -109,12 +106,8 @@ def main():
 
     # Ausgabe der Statistik über die Anzahl der ausgeliehenen Bücher pro Student
     print_statistics(students)
-
-    # Ausgabe des Parallelisierungsgrads
-    #print(f"\nDer Parallelisierungsgrad beträgt: {parallelisierungsgrad}\n")
-
+    # Ausgabe über die Verteilung der verschiedenen Ausleih - Kombinationen
     print(f"Erste Kombination wird {fstCombinationCounter} Mal ausgeliehen.\nZweite Kombination wird {sndCombinationCounter} Mal ausgeliehen.")
 
 if __name__ == "__main__":
     main()
-
