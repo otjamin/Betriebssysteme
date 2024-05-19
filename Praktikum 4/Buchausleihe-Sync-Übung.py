@@ -14,7 +14,7 @@ class Library:
         self.book4 = threading.Semaphore(2)
 
 class Student(threading.Thread):
-    students_with_three_books = 0
+    studentsWithThreeBooks = 0
 
     def __init__(self, library, readingTime, fstBooksToBorrow, sndBooksToBorrow):
         threading.Thread.__init__(self)             # Initialisiere den Thread
@@ -52,15 +52,15 @@ class Student(threading.Thread):
                 return False
         self.books_borrowed += 1
         print(f"Student '{self.name}' hat _{self.books_borrowed}_ Mal alle Bücher ausgeliehen\n")
-        Student.students_with_three_books += 1
-        print(f"ALLE DREI: Es gibt _{Student.students_with_three_books}_ Studenten, die gerade drei Bücher haben\n")
+        Student.studentsWithThreeBooks += 1
+        print(f"ALLE DREI: Es gibt _{Student.studentsWithThreeBooks}_ Studenten, die gerade drei Bücher haben\n")
         return True
 
     def return_books(self, books):
         for book in books:
             book.release()
-        Student.students_with_three_books -= 1
-        print(f"ALLE DREI: Es gibt _{Student.students_with_three_books}_ Studenten, die gerade drei Bücher haben\n")
+        Student.studentsWithThreeBooks -= 1
+        print(f"ALLE DREI: Es gibt _{Student.studentsWithThreeBooks}_ Studenten, die gerade drei Bücher haben\n")
 
 def print_statistics(students):
     print("Zusammenfassung:")
