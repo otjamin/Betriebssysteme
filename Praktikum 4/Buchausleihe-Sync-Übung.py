@@ -1,4 +1,4 @@
-# Implementierung Nils
+# Implementierung von Nils
 
 import threading
 import time
